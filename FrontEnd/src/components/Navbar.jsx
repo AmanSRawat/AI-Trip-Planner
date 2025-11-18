@@ -1,0 +1,89 @@
+// src/components/Navbar.jsx
+import { Mountain } from 'lucide-react';
+import { useState, useEffect } from 'react';
+
+export default function Navbar() {
+  const [activeSection, setActiveSection] = useState('home');
+
+  // Smooth scroll function with preventDefault
+  const scrollToSection = (e, id) => {
+    e.preventDefault(); // ← This fixes the reload issue!
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
+  // Optional: Highlight active section while scrolling
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['home', 'why-ai', 'destinations', 'plan-trip'];
+      const scrollPos = window.scrollY + 100;
+
+      for (const section of sections) {
+        const el = document.getElementById(section);
+        if (el && el.offsetTop <= scrollPos && (el.offsetTop + el.offsetHeight) > scrollPos) {
+          setActiveSection(section);
+          break;
+        }
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const navItems = [
+    { name: 'Home', id: 'home' },
+    { name: 'How It Works', id: 'why-ai' },
+    { name: 'Destinations', id: 'destinations' },
+    { name: 'Plan Trip', id: 'plan-trip' },
+  ];
+
+  return (
+    <header className="bg-slate-950/80 backdrop-blur-lg text-white sticky top-0 z-50 border-b border-slate-800">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <div 
+          className="flex items-center gap-3 cursor-pointer" 
+          onClick={(e) => scrollToSection(e, 'home')}
+        >
+          <Mountain className="w-8 h-8 text-teal-400" />
+          <div>
+            <h1 className="text-xl font-bold">UttarakhandAI</h1>
+            <p className="text-xs text-slate-400">Smart Trip Planner</p>
+          </div>
+        </div>
+
+        <nav className="hidden md:flex gap-8">
+          {navItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={(e) => scrollToSection(e, item.id)}
+              className={`text-sm font-medium transition-all duration-300 relative
+                ${activeSection === item.id 
+                  ? 'text-teal-400' 
+                  : 'text-slate-300 hover:text-teal-400'
+                }`}
+            >
+              {item.name}
+              {activeSection === item.id && (
+                <span className="absolute -bottom-6 left-0 w-full h-0.5 bg-teal-400 rounded-full" />
+              )}
+            </button>
+          ))}
+        </nav>
+
+        <div className="flex gap-3">
+          <button className="px-4 py-2 text-sm border border-slate-700 rounded-lg hover:border-teal-400 transition">
+            Sign In
+          </button>
+          <button 
+            onClick={(e) => scrollToSection(e, 'plan-trip')}
+            className="px-5 py-2 bg-teal-500 text-slate-900 rounded-lg font-medium hover:bg-teal-400 transition"
+          >
+            Get Started
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+}
