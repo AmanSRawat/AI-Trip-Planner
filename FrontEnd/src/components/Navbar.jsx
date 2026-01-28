@@ -4,11 +4,23 @@ import { useState, useEffect } from "react";
 import Signin from "./Signin";
 import { Link } from "react-router-dom";
 
+
 function SigninModal({ onClose }) {
   return (
-    <div className="h-full fixed inset-0 z-50 bg-black/25 flex items-center justify-center">
-      <div className="bg-white text-black rounded-xl p-6 w-full max-w-md relative">
-        <button onClick={onClose} className=" bg-green-600/65 w-5 rounded-full absolute top-3 right-3 text-xl">
+    <div className="
+  fixed inset-0 z-[9999]
+  bg-black/40 backdrop-blur-md
+  flex items-center justify-center
+  transition-opacity duration-300
+"
+>
+    <div className="
+      bg-slate-700 rounded-2xl
+      p-6 w-full max-w-md
+      shadow-2xl
+      relative
+    ">
+        <button onClick={onClose} className=" bg-green-600/65 w-auto rounded-3xl absolute top-3 right-4 text-xl p-1">
           ✕
         </button>
         <Signin />
@@ -21,16 +33,21 @@ export default function Navbar() {
   const [activeSection, setActiveSection] = useState("home");
   const [openSignin, setOpenSignin] = useState(false);
 
-  // Smooth scroll function with preventDefault
+  useEffect(() => {
+  document.body.style.overflow = openSignin ? "hidden" : "auto";
+}, [openSignin]);
+
+
+  
   const scrollToSection = (e, id) => {
-    e.preventDefault(); // ← This fixes the reload issue!
+    e.preventDefault(); 
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
-  // Optional: Highlight active section while scrolling
+
   useEffect(() => {
     const handleScroll = () => {
       const sections = ["home", "why-ai", "destinations", "plan-trip"];
@@ -97,7 +114,7 @@ export default function Navbar() {
           <div className="flex gap-3">
             <button
               onClick={() => setOpenSignin(true)}
-              className="px-4 py-2 text-sm border border-slate-700 rounded-lg hover:border-teal-400"
+              className="px-4 py-2 text-sm border border-slate-500 rounded-lg hover:border-teal-400"
             >
               Sign In
             </button>
