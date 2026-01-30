@@ -1,41 +1,43 @@
 // src/components/Navbar.jsx
 import { Mountain } from "lucide-react";
 import { useState, useEffect } from "react";
-import Signin from "./Signin";
 import { Link } from "react-router-dom";
+import {AuthModal} from './index'
 
 
-function SigninModal({ onClose }) {
-  return (
-    <div className="
-  fixed inset-0 z-[9999]
-  bg-black/40 backdrop-blur-md
-  flex items-center justify-center
-  transition-opacity duration-300
-"
->
-    <div className="
-      bg-slate-700 rounded-2xl
-      p-6 w-full max-w-md
-      shadow-2xl
-      relative
-    ">
-        <button onClick={onClose} className=" bg-green-600/65 w-auto rounded-3xl absolute top-3 right-4 text-xl p-1">
-          ✕
-        </button>
-        <Signin />
-      </div>
-    </div>
-  );
-}
+
+// function SigninModal({ onClose }) {
+//   return (
+//     <div className="
+//   fixed inset-0 z-[9999]
+//   bg-black/40 backdrop-blur-md
+//   flex items-center justify-center
+//   transition-opacity duration-300
+// "
+// >
+//     <div className="
+//       bg-slate-700 rounded-2xl
+//       p-6 w-full max-w-md
+//       shadow-2xl
+//       relative
+//     ">
+//         <button onClick={onClose} className=" bg-green-600/65 w-auto rounded-3xl absolute top-3 right-4 text-xl p-1">
+//           ✕
+//         </button>
+//         <Signin />
+//       </div>
+//     </div>
+//   );
+// }
 
 export default function Navbar() {
+  const [showAuth, setShowAuth] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
-  const [openSignin, setOpenSignin] = useState(false);
+  // const [openSignin, setOpenSignin] = useState(false);
 
-  useEffect(() => {
-  document.body.style.overflow = openSignin ? "hidden" : "auto";
-}, [openSignin]);
+//   useEffect(() => {
+//   document.body.style.overflow = openSignin ? "hidden" : "auto";
+// }, [openSignin]);
 
 
   
@@ -112,12 +114,14 @@ export default function Navbar() {
           </nav>
 
           <div className="flex gap-3">
-            <button
+            {/* <button
               onClick={() => setOpenSignin(true)}
               className="px-4 py-2 text-sm border border-slate-500 rounded-lg hover:border-teal-400"
             >
               Sign In
-            </button>
+            </button> 
+            */}
+            <button onClick={() => setShowAuth(true)} className="bg-transparent border-teal-600/75 border-2 p-2 rounded-xl cursor-pointer">Signin</button>
             <a
               onClick={(e) => scrollToSection(e, "plan-trip")}
               className="px-5 py-2 bg-teal-500 text-slate-900 rounded-lg font-medium hover:bg-teal-400 transition"
@@ -127,7 +131,7 @@ export default function Navbar() {
           </div>
         </div>
       </header>
-      {openSignin && <SigninModal onClose={() => setOpenSignin(false)} />}
+     {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
     </>
   );
 }
