@@ -1,7 +1,11 @@
 import { Sparkles } from 'lucide-react';
 
+
 export default function Hero() {
+
+
   return (
+    <>
     <section className="relative h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0 bg-black/40" />
       <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=2070" alt="Himalayas" className="absolute inset-0 w-full h-full object-cover" />
@@ -27,5 +31,5 @@ export default function Hero() {
         </div>
       </div>
     </section>
-  );
+  </>);
 }
