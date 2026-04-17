@@ -1,64 +1,38 @@
-// src/App.jsx
-
-import { useEffect } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-
-import { Routes, Route } from "react-router-dom";
-import {
-  Navbar,
-  Hero,
-  WhyAISection,
-  DestinationsGrid,
-  TripPlannerForm,
-  Footer,
-  auth
-} from "./components/index";
+import { Navigate, Route, Routes } from "react-router-dom";
+import ProtectedRoute from "./components/ProtectedRoute";
+import LandingPage from "./pages/LandingPage";
+import DashboardPage from "./pages/DashboardPage";
+import EditProfilePage from "./pages/EditProfilePage";
+import SavedItinerariesPage from "./pages/SavedItinerariesPage";
+import RouteDemoPage from "./pages/RouteDemoPage";
+import Toast from "./components/Toast";
+import { useToast } from "./context/ToastContext";
 
 export default function App() {
-  
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log("Logged in:", user.displayName);
-      } else {
-        console.log("Logged out");
-      }
-    });
-
-    return unsubscribe;
-  }, []);
+  const { toast, hideToast } = useToast();
 
   return (
     <>
-      <div className="min-h-screen bg-slate-950 text-white">
-        <Navbar />
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
 
-        <section id="home">
-          {" "}
-          {/* ← Home */}
-          <Hero />
-        </section>
+        <Route element={<ProtectedRoute />}>
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/dashboard/itineraries" element={<SavedItinerariesPage />} />
+          <Route path="/profile/edit" element={<EditProfilePage />} />
+          <Route path="/demo/route" element={<RouteDemoPage />} />
+        </Route>
 
-        <section id="why-ai">
-          {" "}
-          {/* ← How It Works */}
-          <WhyAISection />
-        </section>
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
 
-        <section id="destinations">
-          {" "}
-          {/* ← Destinations */}
-          <DestinationsGrid />
-        </section>
-
-        <section id="plan-trip">
-          {" "}
-          {/* ← Plan Trip */}
-          <TripPlannerForm />
-        </section>
-
-        <Footer />
-      </div>
+      <Toast
+        isOpen={toast.isOpen}
+        type={toast.type}
+        title={toast.title}
+        message={toast.message}
+        onClose={hideToast}
+      />
     </>
   );
 }
